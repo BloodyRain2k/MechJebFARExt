@@ -87,7 +87,13 @@ namespace MuMech
 
             return FARAPI.GetActiveControlSys_TermVel();
         }
+        
+        public double AtmosphericDensityFAR(Vessel vessel)
+        {
+            if (vesselState.altitudeASL > mainBody.RealMaxAtmosphereAltitude()) return 0;
 
+            return FARAeroUtil.GetCurrentDensity(vessel.mainBody, vessel.CoM);
+        }
 
         public override void OnStart(PartModule.StartState state)
         {
@@ -99,6 +105,7 @@ namespace MuMech
                 vesselState.vesselStatePartModuleExtensions.Add(partModuleUpdate);
 
                 vesselState.TerminalVelocityCall = TerminalVelocityFAR;
+                vesselState.AtmosphericDensityCall = AtmosphericDensityFAR;
             }
         }
     }
